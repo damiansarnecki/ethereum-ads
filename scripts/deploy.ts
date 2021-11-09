@@ -13,18 +13,10 @@ async function main() {
   // manually to make sure everything is compiled
   // await hre.run('compile');
 
-  // We get the contract to deploy
-  const Greeter = await ethers.getContractFactory("Greeter");
-  const greeter = await Greeter.deploy("Hello, Hardhat!");
-
-  await greeter.deployed();
-
   const Advertisement = await ethers.getContractFactory("Advertisement");
   const advertisement = await Advertisement.deploy();
-
   await advertisement.deployed();
 
-  console.log(await advertisement.x.call({}))
   console.log("Advertisement deployed to:", advertisement.address);
 }
 

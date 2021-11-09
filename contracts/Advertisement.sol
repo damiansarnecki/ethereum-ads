@@ -39,8 +39,5 @@ contract Advertisement is Ownable {
         ads[_index].text = _text;
     }
 
-    uint public x = 5;
-
-
 }
 

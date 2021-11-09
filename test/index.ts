@@ -5,10 +5,10 @@ import { ethers } from "hardhat";
 describe("Advertisement", () => {
 
   let Advertisement : any
-  let advertisement : any;
-  let owner : SignerWithAddress, 
-  userOne : SignerWithAddress, 
-  userTwo : SignerWithAddress;
+  let advertisement : any
+  let owner : SignerWithAddress
+  let userOne : SignerWithAddress 
+  let userTwo : SignerWithAddress
 
   beforeEach(async () => {
     Advertisement = await ethers.getContractFactory("Advertisement");
@@ -44,10 +44,15 @@ describe("Advertisement", () => {
   })
 
   describe('Editing ads', () => {
-    it('prevents editing if not owner', async () => {
+    it('lets owner edit ad text', async () => {
       await advertisement.createAd(2,3,"test text");
       await advertisement.editAdText(0, "essa");
       expect((await advertisement.getAds())[0].text).to.equal("essa");
+    })
+
+    it('prevents from editing if not owner', async () => {
+      await advertisement.createAd(2,3,"test text");
+      await expect(advertisement.connect(userOne).editAdText(0, "essa")).to.be.revertedWith("You are not ad owner");
     })
   })
 
