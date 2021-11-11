@@ -26,32 +26,29 @@ describe("Advertisement", () => {
     it('Sets correct owner', async () => {
       expect(await advertisement.owner()).to.equal(owner.address);
     })
+    it('Creates ads at deploy', async() => {
+      expect((await advertisement.getAds()).length).to.equal(10);
+    })
+    it('Gives created ads to contract creator', async() => {
+      expect((await advertisement.getUserAds(owner.address)).length).to.be.equal(10);
+    })
   })
 
   describe('Adding ads', () => {
-
-    it('Adds new advertisement', async () => {
-      await advertisement.createAd(1,2,"test");
-      expect((await advertisement.getAds()).length).to.equal(1);
-    })
-
     it('Sets values correctly', async () => {
-      await advertisement.createAd(2,3,"test text");
-      expect((await advertisement.getAds())[0].day).to.equal(2); //day
-      expect((await advertisement.getAds())[0].spot).to.equal(3); //spot
-      expect((await advertisement.getAds())[0].text).to.equal("test text"); //text
+      expect((await advertisement.getAds())[0].day).to.equal(0); //day
+      expect((await advertisement.getAds())[0].spot).to.equal(1); //spot
+      expect((await advertisement.getAds())[0].text).to.equal("Buy your ad"); //text
     })
   })
 
   describe('Editing ads', () => {
     it('lets owner edit ad text', async () => {
-      await advertisement.createAd(2,3,"test text");
       await advertisement.editAdText(0, "essa");
       expect((await advertisement.getAds())[0].text).to.equal("essa");
     })
 
     it('prevents from editing if not owner', async () => {
-      await advertisement.createAd(2,3,"test text");
       await expect(advertisement.connect(userOne).editAdText(0, "essa")).to.be.revertedWith("You are not ad owner");
     })
   })
